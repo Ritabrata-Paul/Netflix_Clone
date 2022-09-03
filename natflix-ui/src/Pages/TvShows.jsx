@@ -1,0 +1,74 @@
+import React, { useEffect, useState } from "react";
+
+import { onAuthStateChanged } from "firebase/auth";
+import { firebaseAuth } from "../utils/firebase-config";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchMovies, getGenres } from "../store";
+import styled from "styled-components";
+import Navbar from "../Components/Navbar";
+import Slider from "../Components/Slider";
+import NotAvilable from "../Components/NotAvilable";
+import SelectGenre from "../Components/SelectGenre";
+
+
+export default function TvShows() {
+
+    const [isScrolled, setIsScrolled] = useState(false);
+    const movies = useSelector((state) => state.netflix.movies);
+    const genres = useSelector((state) => state.netflix.genres);
+    const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getGenres());
+    }, []);
+
+    useEffect(() => {
+        if (genresLoaded) {
+        dispatch(fetchMovies({ genres, type: "tv" }));
+        }
+    }, [genresLoaded]);
+
+    const [user, setUser] = useState(undefined);
+
+    onAuthStateChanged(firebaseAuth, (currentUser) => {
+        
+    });
+
+    window.onscroll = () => {
+        setIsScrolled(window.pageYOffset === 0 ? false : true);
+        return () => (window.onscroll = null);
+    };
+
+
+  return (
+    <Container>
+      <div className="navbar">
+        <Navbar isScrolled={isScrolled} />
+      </div>
+      
+      <div className="data">
+        
+            <SelectGenre genres={genres} type="tv" />
+            {movies.length ? <Slider movies= {movies} /> :
+            <NotAvilable />}
+        
+      </div>
+    </Container>
+  )
+}
+
+
+const Container =  styled.div`
+.data {
+    margin-top: 8rem;
+    .not-available {
+      text-align: center;
+      color: white;
+      margin-top: 4rem;
+    }
+  }
+`;
