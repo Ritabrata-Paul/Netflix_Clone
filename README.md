@@ -315,7 +315,7 @@ Happy Hacking!
 
 # Author
 
-👤 **Ahmed Tohamy**
+👤 **Ritabrata Paul**
 - Github: https://github.com/Ritabrata-Paul
 - Linkedin: https://www.linkedin.com/in/ritabrata-paul-23a75919a/
 - Email: ritabrata720@gmail.com
